@@ -238,8 +238,8 @@ static void *motor_actuation_thread(void *arg) {
     clock_gettime(CLOCK_MONOTONIC, &next);
     const long PERIOD_NS = 10L * 1000000L;
 
-    const float Kp = 0.2f;
-    const float base_throttle = 0.5f;
+    const float Kp = 0.5f;
+    const float base_throttle = 0.3f;
 
     while (running) {
         int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL);
