@@ -1,30 +1,35 @@
-# Makefile for drone-sim
-
 # Compiler and flags
-CC       := gcc
-CFLAGS   := -Wall -Wextra -O2 -std=gnu11 -pthread -lrt
+CXX     = g++
+CC      = gcc
 
-# Libraries
-LIBS     := -lpigpio
+CXXFLAGS  = --std=c++23 -Wall -Werror -pedantic -pthread
+CFLAGS    = -Wall -Werror -pedantic
 
-# Target
-TARGET   := drone_sim
-SRCS     := main.c
-OBJS     := $(SRCS:.c=.o)
+# Target executable
+TARGET = sequencer
 
-.PHONY: all clean
+# Sources
+CPP_SRCS = Sequencer.cpp
+C_SRCS   = tasks.c
+
+# Objects
+CPP_OBJS = $(CPP_SRCS:.cpp=.o)
+C_OBJS   = $(C_SRCS:.c=.o)
+OBJS     = $(CPP_OBJS) $(C_OBJS)
 
 all: $(TARGET)
 
-# Link
+# link everything together
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -lpigpio
 
-# Compile
+# compile C++ sources
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# compile C sources
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Remove binaries and objects
 clean:
 	rm -f $(TARGET) $(OBJS)
-
